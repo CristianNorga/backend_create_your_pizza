@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serverLocal": "nodemon server/serverLocal.js",
+    "serverOnline": "nodemon server/serverAtlas.js"
+  },
+  "author": "Cristian David Noreña Saldarriaga <cristian.rraga95@hotmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^4.1.2",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "nodemon": "^2.0.13"
+  }
+}
