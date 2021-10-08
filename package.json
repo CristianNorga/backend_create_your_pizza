@@ -1,8 +1,9 @@
 {
   "name": "backend",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "serverLocal": "nodemon server/serverLocal.js",
     "serverOnline": "nodemon server/serverAtlas.js"

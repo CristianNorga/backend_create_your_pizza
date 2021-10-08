@@ -2,7 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import * as conector from './server/conector.js';
-// var ObjectId = require('mongodb').ObjectId;
+import { ObjectId } from 'mongodb';
 const app = express();
 app.use(cors());
 const port = 8090;
@@ -67,7 +67,7 @@ app.post('/check', async function (req, res) {
 	try {
     let dbname = "Pizza_Mia";
     let collectionName = 'Pedidos';
-		let productCreated = await conector.addDocument(dbname, collectionName, {
+		let checkCreated = await conector.addDocument(dbname, collectionName, {
 			quanty: req.body.quanty,
 			confirmed: req.body.confirmed,
 			totalValue: req.body.totalValue,
@@ -77,7 +77,7 @@ app.post('/check', async function (req, res) {
 		res.status = 200;
 		res.send({
 			response: 'ok',
-			data: productCreated,
+			data: checkCreated,
 		});
 	} catch (err) {
 		res.status = 500;
@@ -92,8 +92,8 @@ app.get('/checks', async function (req, res) {
 	try {
     let dbname = 'Pizza_Mia';
     let collectionName = 'Pedidos';
-		let productoGet = await conector.findDocuments(dbname, collectionName, {});
-		if (productoGet.length == 0) {
+		let checksGet = await conector.findDocuments(dbname, collectionName, {});
+		if (checksGet.length == 0) {
 			res.status(404);
 			res.send({
 				response: 'error',
@@ -103,7 +103,7 @@ app.get('/checks', async function (req, res) {
 			res.status(200);
 			res.send({
 				response: 'ok',
-				data: productoGet,
+				data: checksGet,
 			});
 		}
 	} catch (err) {
@@ -119,11 +119,13 @@ app.get('/check', async function (req, res) {
   let dbname = 'Pizza_Mia';
   let collectionName = 'Pedidos';
 	try {
-		delete req.query['_'];
-		let productoGet = await conector.findDocuments(dbname, collectionName, {
+		// delete req.query['_'];
+    console.log(req.query)
+		let checkGet = await conector.findDocuments(dbname, collectionName, {
 			_id: new ObjectId(req.query._id),
+      // _id: req.query._id,
 		});
-		if (productoGet.length == 0) {
+		if (checkGet.length == 0) {
 			res.status(404);
 			res.send({
 				response: 'error',
@@ -133,7 +135,7 @@ app.get('/check', async function (req, res) {
 			res.status(200);
 			res.send({
 				response: 'ok',
-				data: productoGet,
+				data: checkGet,
 			});
 		}
 	} catch (err) {
@@ -145,73 +147,61 @@ app.get('/check', async function (req, res) {
 	}
 });
 
-
-
-
-app.post('/check', (req, res) => {
-	res.status = 200;
-	res.send({
-		response: 'ok',
-		data: 'created',
-	});
-	// data[_id] = new ObjectId(req.query._id);
-	// req.body["_id"] =
-	// collectionCheck.insertOne(req.body)
-	// 	.then((result) => {
-	// 		res.json('Success');
-	// 	})
-	// 	.catch((error) => console.error(error));
-});
-app.get('/checks', (req, res) => {
-	dataMongo
-		.collection('Pedidos')
-		.find()
-		.toArray()
-		.then((result) => {
-			res.status(200);
-			res.json(result);
-		})
-		.catch((error) => console.error(error));
-});
-app.get('/check/:id', (req, res) => {
-	db
-		.collection('Pedidos')
-		.find({ id: req.params.id })
-		.toArray()
-		.then((results) => {
-			res.json(results);
-		})
-		.catch((error) => console.error(error));
-});
-app.put('/check/:id', (req, res) => {
-	collectionCheck
-		.findOneAndUpdate(
-			{ id: req.params.id },
+app.put('/check', async function (req, res) {
+	try {
+    let dbname = 'Pizza_Mia';
+    let collectionName = 'Pedidos';
+    // console.log(req.body._id)
+		let checkUpdated = await conector.updateDocument(
+			dbname,
+			collectionName,
 			{
-				$set: {
-					quanty: req.body.quanty,
-					confirmed: req.body.confirmed,
-					totalValue: req.body.totalValue,
-					select: req.body.select,
-					pizzas: req.body.pizzas,
-				},
+				_id: new ObjectId(req.body._id),
 			},
 			{
-				upsert: true,
+				$set: {
+					// quanty: req.body.quanty,
+					confirmed: req.body.confirmed,
+					// totalValue: req.body.totalValue,
+					// select: req.body.select,
+					// pizzas: req.body.pizzas,
+				},
 			}
-		)
-		.then((result) => {
-			res.json('Updated');
-		})
-		.catch((error) => console.error(error));
+		);
+		res.status(200);
+		res.send({
+			response: 'ok',
+			data: checkUpdated,
+		});
+	} catch (err) {
+		res.status(500);
+		res.send({
+			response: 'error',
+			data: err,
+		});
+	}
 });
-app.delete('/check/:id', (req, res) => {
-	collectionCheck
-		.deleteOne({ id: req.params.id })
-		.then((result) => {
-			res.json('Deleted');
-		})
-		.catch((error) => console.error(error));
+
+app.delete('/check', async function (req, res) {
+	try {
+    let dbname = 'Pizza_Mia';
+    let collectionName = 'Pedidos';
+		let _id = req.body._id;
+		let deleted = await conector.deleteDocuments(dbname, collectionName, {
+			_id: new ObjectId(_id),
+		});
+		res.status(200);
+		res.send({
+			response: 'ok',
+			data: deleted,
+		});
+	} catch (err) {
+		res.status(500);
+		res.send({
+			response: 'error',
+			data: err,
+		});
+	}
 });
 
 //Lanzamiento del servidor

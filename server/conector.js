@@ -3,7 +3,6 @@ import { dbconfig } from './dbconfig.js';
 import { MongoClient } from 'mongodb';
 import { Ingredients } from './producto.js';
 
-
 export function connect() {
 	return MongoClient.connect(dbconfig.uri);
 }
