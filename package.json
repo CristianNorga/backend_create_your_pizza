@@ -3,10 +3,12 @@
   "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "serverLocal": "nodemon server/serverLocal.js",
-    "serverOnline": "nodemon server/serverAtlas.js"
+    "serverOnline": "nodemon server/serverAtlas.js",
+    "start": "node index.js"
   },
   "author": "Cristian David Noreña Saldarriaga <cristian.rraga95@hotmail.com>",
   "license": "ISC",
