@@ -6,18 +6,16 @@ import { ObjectId } from 'mongodb';
 const app = express();
 app.use(cors());
 
-app.use((req, res, next) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, ContentType, Accept'
-	);
-	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-	next();
-});
-
-const port = 8090;
+// app.use((req, res, next) => {
+// 	res.header('Access-Control-Allow-Origin', '*');
+// 	res.header(
+// 		'Access-Control-Allow-Headers',
+// 		'Origin, X-Requested-With, ContentType, Accept'
+// 	);
+// 	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+// 	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+// 	next();
+// });
 
 //Inicializacion variables necesarias
 
@@ -32,18 +30,18 @@ const port = 8090;
 //procesamiento de las peticiones
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(function (req, res, next) {
-// 	console.log(
-// 		'--------------' +
-// 			'\n' +
-// 			'URL: ' +
-// 			req.url +
-// 			'\n' +
-// 			'Request method: ' +
-// 			req.method
-// 	);
-// 	next();
-// });
+app.use(function (req, res, next) {
+	console.log(
+		'--------------' +
+			'\n' +
+			'URL: ' +
+			req.url +
+			'\n' +
+			'Request method: ' +
+			req.method
+	);
+	next();
+});
 
 // INGREDIENTS
 app.get('/ingredients', async function (req, res) {
@@ -215,12 +213,12 @@ app.delete('/check', async function (req, res) {
 	}
 });
 
-//Lanzamiento del servidor
+// Lanzamiento del servidor
 app.set('PORT', process.env.PORT || 3000);
 app.listen(app.get('PORT'), () => {
 	console.log(`Server started on port: ${app.get('PORT')}`);
 });
-
+// const port = 8090;
 // app.listen(port, () => {
 // 	console.log(`Example app listening at http://localhost:${port}`);
 // });
