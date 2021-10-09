@@ -6,42 +6,20 @@ import { ObjectId } from 'mongodb';
 const app = express();
 app.use(cors());
 
-// app.use((req, res, next) => {
-// 	res.header('Access-Control-Allow-Origin', '*');
-// 	res.header(
-// 		'Access-Control-Allow-Headers',
-// 		'Origin, X-Requested-With, ContentType, Accept'
-// 	);
-// 	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-// 	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-// 	next();
-// });
-
-//Inicializacion variables necesarias
-
-  // console.log('Conexion a Atlas Exitoso');
-  // dataMongo = client.db('Pizza_Mia');
-  // db = client.db('Pizza_Mia');
-  // collectionCheck = db.collection('Pedidos');
-  // collectionSizes = db.collection('Sizes');
-  // collectionSauces = db.collection('Sauces');
-  // collectionCondiments = db.collection('Condiments');
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, ContentType, Accept'
+	);
+	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+	next();
+});
 
 //procesamiento de las peticiones
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(function (req, res, next) {
-	console.log(
-		'--------------' +
-			'\n' +
-			'URL: ' +
-			req.url +
-			'\n' +
-			'Request method: ' +
-			req.method
-	);
-	next();
-});
 
 // INGREDIENTS
 app.get('/ingredients', async function (req, res) {
@@ -218,7 +196,3 @@ app.set('PORT', process.env.PORT || 3000);
 app.listen(app.get('PORT'), () => {
 	console.log(`Server started on port: ${app.get('PORT')}`);
 });
-// const port = 8090;
-// app.listen(port, () => {
-// 	console.log(`Example app listening at http://localhost:${port}`);
-// });
