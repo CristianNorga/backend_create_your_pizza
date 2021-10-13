@@ -1,22 +1,32 @@
 //includes
-import { dbconfig } from './dbconfig.js';
-import { MongoClient } from 'mongodb';
-import { Ingredients } from './producto.js';
+let connection = undefined;
+let { dbconfig } = require('./dbconfig.js');
+let { MongoClient } = require('mongodb');
+let { Ingredients } = require('./producto.js');
 
-export function connect() {
+function connect() {
 	return MongoClient.connect(dbconfig.uri);
 }
 
-export async function getConnection() {
-	var connection = await connect();
+exports.connect = connect;
+
+async function getConnection() {
+	if (connection) {
+		return connection;
+	}
+	connection = await connect();
 	console.log('Connection stablished');
 	return connection;
 }
 
-export async function getCollection(dbName, collectionName) {
+exports.getConnection = getConnection;
+
+async function getCollection(dbName, collectionName) {
 	var connection = await getConnection();
 	return connection.db(dbName).collection(collectionName);
 }
+
+exports.getCollection = getCollection;
 
 // export async function getCollections(dbName, collectionName) {
 //   var connection = await getConnection();
@@ -29,12 +39,11 @@ export async function getCollection(dbName, collectionName) {
 //   return collections;
 // }
 
-export async function findIngredients(dbName, collectionName) {
-  var connection = await getConnection();
+async function findIngredients(dbName, collectionName) {
 
-	var sizes = await connection.db(dbName).collection(collectionName[0]);
-	var sauces = await connection.db(dbName).collection(collectionName[1]);
-	var condiments = await connection.db(dbName).collection(collectionName[2]);
+	var sizes = await getCollection (dbName, collectionName[0]);
+	var sauces = await getCollection(dbName, collectionName[1]);
+	var condiments = await getCollection(dbName, collectionName[2]);
 
 	let resultado = new Ingredients(
 		await sizes.find().toArray(),
@@ -44,7 +53,9 @@ export async function findIngredients(dbName, collectionName) {
 	return resultado;
 }
 
-export async function findDocuments(dbName, collectionName, filter) {
+exports.findIngredients = findIngredients;
+
+async function findDocuments(dbName, collectionName, filter) {
 	var collection = await getCollection(dbName, collectionName);
 	var cursor = collection.find(filter).limit(50);
 	var listaResultado = [];
@@ -58,37 +69,36 @@ export async function findDocuments(dbName, collectionName, filter) {
 	return listaResultado;
 }
 
-export async function addDocument(dbName, collectionName, document) {
+exports.findDocuments = findDocuments;
+
+async function addDocument(dbName, collectionName, document) {
 	var collection = await getCollection(dbName, collectionName);
 	var result = await collection.insertOne(document);
 	return result;
 }
 
-export async function addDocuments(dbName, collectionName, documents) {
+exports.addDocument = addDocument;
+
+async function addDocuments(dbName, collectionName, documents) {
 	var collection = await getCollection(dbName, collectionName);
 	var result = await collection.insertMany(documents);
 	return result;
 }
 
-export async function deleteDocuments(dbName, collectionName, filter) {
+exports.addDocuments = addDocuments;
+
+async function deleteDocuments(dbName, collectionName, filter) {
 	var collection = await getCollection(dbName, collectionName);
 	var result = await collection.deleteMany(filter);
 	return result;
 }
 
-export async function updateDocument(dbName, collectionName, filter, updateObject) {
+exports.deleteDocuments = deleteDocuments;
+
+async function updateDocument(dbName, collectionName, filter, updateObject) {
 	var collection = await getCollection(dbName, collectionName);
 	var result = await collection.updateOne(filter, updateObject);
 	return result;
 }
-// export const conector = {
-// 	uri: uri,
-// };
-// module.exports = {
-// 	// findDocuments,
-// 	addDocument,
-// 	deleteDocuments,
-// 	addDocuments,
-// 	updateDocument,
-// 	findIngredients,
-// };
+
+exports.updateDocument = updateDocument;

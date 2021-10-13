@@ -1,19 +1,23 @@
 //Requires
-import express from 'express';
-import cors from 'cors';
-import * as conector from './server/conector.js';
-import { ObjectId } from 'mongodb';
+let express = require('express');
+let cors = require('cors');
+let conector = require('./server/conector.js');
+let { ObjectId } = require('mongodb');
+conector.getConnection();
+
+// Inicializar configuracion
 const app = express();
 app.use(cors());
 
+// middleware
 app.use((req, res, next) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, ContentType, Accept'
-	);
-	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+// 	res.header('Access-Control-Allow-Origin', '*');
+// 	res.header(
+// 		'Access-Control-Allow-Headers',
+// 		'Origin, X-Requested-With, ContentType, Accept'
+// 	);
+// 	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+// 	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
 	next();
 });
 
@@ -192,7 +196,7 @@ app.delete('/check', async function (req, res) {
 });
 
 // Lanzamiento del servidor
-app.set('PORT', process.env.PORT || 3000);
+app.set('PORT', process.env.PORT || 3030);
 app.listen(app.get('PORT'), () => {
 	console.log(`Server started on port: ${app.get('PORT')}`);
 });

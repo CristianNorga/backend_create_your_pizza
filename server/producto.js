@@ -1,4 +1,4 @@
-export class Size {
+exports.Size = class Size {
 	constructor(id, size, portion, price, img, scale, description) {
 		this.id = id;
 		this.size = size;
@@ -10,7 +10,7 @@ export class Size {
 	}
 }
 
-export class Sauce {
+exports.Sauce = class Sauce {
 	constructor(id, quanty, name, price, img, description) {
 		this.id = id;
 		this.quanty = quanty;
@@ -21,7 +21,7 @@ export class Sauce {
 	}
 }
 
-export class Condiment {
+exports.Condiment = class Condiment {
 	constructor(id, quanty, name, price, img, representation, description) {
 		this.id = id;
 		this.quanty = quanty;
@@ -33,7 +33,7 @@ export class Condiment {
 	}
 }
 
-export class Ingredients {
+exports.Ingredients = class Ingredients {
 	constructor(sizes, sauces, condiments) {
 		this.sizes = sizes;
 		this.sauces = sauces;
