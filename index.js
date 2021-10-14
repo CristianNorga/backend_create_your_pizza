@@ -195,8 +195,11 @@ app.delete('/check', async function (req, res) {
 	}
 });
 
+//static file
+app.use(express.static(__dirname +'/public'));
+
 // Lanzamiento del servidor
-app.set('PORT', process.env.PORT || 3030);
+app.set('PORT', process.env.PORT || 3000);
 app.listen(app.get('PORT'), () => {
 	console.log(`Server started on port: ${app.get('PORT')}`);
 });
