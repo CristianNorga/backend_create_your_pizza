@@ -2,7 +2,7 @@
 let connection = undefined;
 let { dbconfig } = require('./dbconfig.js');
 let { MongoClient } = require('mongodb');
-let { Ingredients } = require('./producto.js');
+let { Ingredients } = require('../models/producto');
 
 function connect() {
 	return MongoClient.connect(dbconfig.uri);
@@ -28,16 +28,16 @@ async function getCollection(dbName, collectionName) {
 
 exports.getCollection = getCollection;
 
-// export async function getCollections(dbName, collectionName) {
-//   var connection = await getConnection();
-//   let collections = {}
-//   for (x in collectionName){
-//     console.log('x:' + collectionName);
-//     collections[collectionName[x]] = connection.db(dbName).collection(collectionName[x]);
-//   }
+export async function getCollections(dbName, collectionName) {
+  var connection = await getConnection();
+  let collections = {}
+  for (x in collectionName){
+    console.log('x:' + collectionName);
+    collections[collectionName[x]] = connection.db(dbName).collection(collectionName[x]);
+  }
 
-//   return collections;
-// }
+  return collections;
+}
 
 async function findIngredients(dbName, collectionName) {
 
